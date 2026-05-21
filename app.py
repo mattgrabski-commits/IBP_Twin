@@ -64,11 +64,11 @@ def generate_synthetic_erp_data() -> Dict[str, pd.DataFrame]:
     # Assembly hours per unit: realistic Tier-1 automotive line-rate values
     # (includes takt time, test cycle, material handling)
     skus = {
-        "SKU-EV-DRIVE-001": {"name": "Bumeper",        "family": "Powertrain",  "asm_hrs": 0.45},
-        "SKU-EV-BATT-002":  {"name": "Battery Pack Assembly",  "family": "Powertrain",  "asm_hrs": 0.68},
-        "SKU-BRKE-MOD-003": {"name": "Brake Control Module",   "family": "Safety",      "asm_hrs": 0.22},
-        "SKU-ADSS-CAM-004": {"name": "ADAS Camera Unit",       "family": "Electronics", "asm_hrs": 0.15},
-        "SKU-STEER-005":    {"name": "Electric Power Steering", "family": "Chassis",    "asm_hrs": 0.35},
+        "SKU-EV-DRIVE-001": {"name": "Bumper",        "family": "Powertrain",  "asm_hrs": 0.45},
+        "SKU-EV-BATT-002":  {"name": "Battery Pack",  "family": "Powertrain",  "asm_hrs": 0.68},
+        "SKU-BRKE-MOD-003": {"name": "Fuel System",   "family": "Safety",      "asm_hrs": 0.22},
+        "SKU-ADSS-CAM-004": {"name": "Module",       "family": "Electronics", "asm_hrs": 0.15},
+        "SKU-STEER-005":    {"name": "Tailgate", "family": "Chassis",    "asm_hrs": 0.35},
     }
 
     # ── OEM demand plan (units/month per SKU) ────────────────────────────────────
