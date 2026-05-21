@@ -1,7 +1,7 @@
 """
 ╔══════════════════════════════════════════════════════════════════════════════════╗
-║         SIOP DIGITAL TWIN — Enterprise Knowledge Graph Engine                  ║
-║         Tier 1 Automotive Manufacturing | Financial-First Planning             ║
+║         SIOP DIGITAL TWIN — SIOP DIGITAL TWIN                  ║
+║         Tier 1 Automotive Manufacturing | DEMAND SUPPLY INVENTORY SIOP             ║
 ║         Built with Streamlit · Pandas · Plotly                                ║
 ╚══════════════════════════════════════════════════════════════════════════════════╝
 
