@@ -888,7 +888,7 @@ def render_sidebar() -> ScenarioParams:
         )
 
         st.markdown("---")
-        if st.button("🔄 Reset to Baseline", width="full"):
+        if st.button("🔄 Reset to Baseline", use_container_width=True):
             st.rerun()
 
     return ScenarioParams(
@@ -1011,7 +1011,7 @@ def render_cost_detail_table(sc_costs: pd.DataFrame, margin_threshold: float):
                .applymap(highlight_delta,  subset=["GM Delta (ppts)"])
                .format({"Scenario GM%": "{:.1f}%", "GM Delta (ppts)": "{:+.1f}"})
     )
-    st.dataframe(styled, width="full", hide_index=True)
+    st.dataframe(styled, use_container_width=True, hide_index=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1055,28 +1055,28 @@ def main():
                 unsafe_allow_html=True)
     col_l, col_r = st.columns(2)
     with col_l:
-        st.plotly_chart(chart_demand_comparison(sc_demand), width="full")
+        st.plotly_chart(chart_demand_comparison(sc_demand), use_container_width=True)
     with col_r:
         st.plotly_chart(chart_capacity_utilisation(capacity, params.capacity_alert_pct),
-                        width="full")
+                        use_container_width=True)
 
     # ── Chart row 2: P&L Waterfall + Margin by SKU ───────────────────────────────
     st.markdown('<div class="section-header">💰 Financial Impact Analysis</div>',
                 unsafe_allow_html=True)
     col_l, col_r = st.columns(2)
     with col_l:
-        st.plotly_chart(chart_pl_waterfall(pl_bridge), width="full")
+        st.plotly_chart(chart_pl_waterfall(pl_bridge), use_container_width=True)
     with col_r:
-        st.plotly_chart(chart_margin_by_sku(sc_costs), width="full")
+        st.plotly_chart(chart_margin_by_sku(sc_costs), use_container_width=True)
 
     # ── Chart row 3: Inventory + Working Capital ─────────────────────────────────
     st.markdown('<div class="section-header">📊 Inventory & Working Capital</div>',
                 unsafe_allow_html=True)
     col_l, col_r = st.columns(2)
     with col_l:
-        st.plotly_chart(chart_inventory_trend(inventory), width="full")
+        st.plotly_chart(chart_inventory_trend(inventory), use_container_width=True)
     with col_r:
-        st.plotly_chart(chart_working_capital(inventory), width="full")
+        st.plotly_chart(chart_working_capital(inventory), use_container_width=True)
 
     # ── Capacity detail table ────────────────────────────────────────────────────
     st.markdown('<div class="section-header">🏭 Monthly Capacity Detail</div>',
@@ -1090,7 +1090,7 @@ def main():
         "Month","Gross Hrs","Maint Hrs","OT Hrs","Net Avail Hrs",
         "Required Hrs","Utilisation %","Status"
     ]
-    st.dataframe(cap_display.round(1), width="full", hide_index=True)
+    st.dataframe(cap_display.round(1), use_container_width=True, hide_index=True)
 
     # ── SKU cost detail ───────────────────────────────────────────────────────────
     render_cost_detail_table(sc_costs, params.margin_alert_threshold)
@@ -1106,7 +1106,7 @@ def main():
             "sku":"SKU","component_name":"Component","std_cost_usd":"Std Cost ($)",
             "origin":"Origin","Risk":"Supply Risk"
         }),
-        width="full", hide_index=True
+        use_container_width=True, hide_index=True
     )
 
     # ── Footer ──────────────────────────────────────────────────────────────────────
