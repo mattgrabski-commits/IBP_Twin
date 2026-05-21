@@ -1,20 +1,20 @@
 """
-╔══════════════════════════════════════════════════════════════════════════════════╗
+╔══════════════════════════════════════════════════════════════════════╗
 ║         SIOP DIGITAL TWIN — Enterprise Knowledge Graph Engine                  ║
 ║         Tier 1 Automotive Manufacturing | Financial-First Planning             ║
 ║         Built with Streamlit · Pandas · Plotly                                ║
-╚══════════════════════════════════════════════════════════════════════════════════╝
+╚══════════════════════════════════════════════════════════════════════╝
 
 Run locally:
     pip install -r requirements.txt
     streamlit run app.py
 """
 
-# ── Standard library ─────────────────────────────────────────────────────────────
+# ── Standard library ──────────────────────────────────────────────────────────
 import warnings
 warnings.filterwarnings("ignore")
 
-# ── Third-party ──────────────────────────────────────────────────────────────────
+# ── Third-party ──────────────────────────────────────────────────────────────
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -26,9 +26,9 @@ from dataclasses import dataclass, field
 from typing import Dict, Tuple
 import random
 
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 # 0. PAGE CONFIG  (must be first Streamlit call)
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 st.set_page_config(
     page_title="SIOP Digital Twin",
     page_icon="🏭",
@@ -36,10 +36,10 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 # 1. SYNTHETIC DATASET GENERATOR — "ERP Master Data Lake"
 #    Mimics data extracted from SAP S/4HANA / Oracle Fusion
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 
 @st.cache_data(show_spinner="Loading ERP master data…")
 def generate_synthetic_erp_data() -> Dict[str, pd.DataFrame]:
@@ -60,7 +60,7 @@ def generate_synthetic_erp_data() -> Dict[str, pd.DataFrame]:
     months = pd.date_range(start="2025-01-01", periods=12, freq="MS")
     month_labels = [m.strftime("%b-%y") for m in months]
 
-    # ── SKU master ───────────────────────────────────────────────────────────────
+    # ── SKU master ───────────────────────────────────────────────────────────
     # Assembly hours per unit: realistic Tier-1 automotive line-rate values
     # (includes takt time, test cycle, material handling — NOT whole-plant hours)
     skus = {
@@ -135,7 +135,7 @@ def generate_synthetic_erp_data() -> Dict[str, pd.DataFrame]:
             })
     bom_df = pd.DataFrame(bom_rows)
 
-    # ── Standard cost card ───────────────────────────────────────────────────────
+    # ── Standard cost card ────────────────────────────────────────────────────────
     asm_labor_rate = 55.0   # USD / assembly hour
     overhead_rate  = 0.28   # 28% of direct cost
 
@@ -216,10 +216,10 @@ def generate_synthetic_erp_data() -> Dict[str, pd.DataFrame]:
     }
 
 
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 # 2. DIGITAL BRAIN — Enterprise Knowledge Graph Calculation Engine
 #    Vectorized computation linking operational decisions to P&L / balance sheet
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 
 @dataclass
 class ScenarioParams:
@@ -248,7 +248,7 @@ class DigitalTwinEngine:
         self.data   = erp_data
         self.params = params
 
-    # ── 2a. Demand Plan ──────────────────────────────────────────────────────────
+    # ── 2a. Demand Plan ─────────────────────────────────────────────────────────
     def build_scenario_demand(self) -> pd.DataFrame:
         df = self.data["demand"].copy()
         shift = 1.0 + self.params.demand_shift_pct / 100.0
@@ -532,9 +532,9 @@ class DigitalTwinEngine:
         }
 
 
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 # 3. CHART LIBRARY — Plotly Visualizations
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 
 PALETTE = {
     "baseline":  "#3B82F6",   # Blue
@@ -752,9 +752,9 @@ def chart_working_capital(inv_df: pd.DataFrame) -> go.Figure:
     return fig
 
 
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 # 4. STREAMLIT UI — Layout & Interactivity
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 
 def render_header():
     st.markdown("""
@@ -888,7 +888,7 @@ def render_sidebar() -> ScenarioParams:
         )
 
         st.markdown("---")
-        if st.button("🔄 Reset to Baseline", use_container_width=True):
+        if st.button("🔄 Reset to Baseline", width="full"):
             st.rerun()
 
     return ScenarioParams(
@@ -1011,12 +1011,12 @@ def render_cost_detail_table(sc_costs: pd.DataFrame, margin_threshold: float):
                .applymap(highlight_delta,  subset=["GM Delta (ppts)"])
                .format({"Scenario GM%": "{:.1f}%", "GM Delta (ppts)": "{:+.1f}"})
     )
-    st.dataframe(styled, use_container_width=True, hide_index=True)
+    st.dataframe(styled, width="full", hide_index=True)
 
 
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 # 5. MAIN ENTRY POINT
-# ════════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 
 def main():
     # ── Session-state initialisation ─────────────────────────────────────────────
@@ -1043,11 +1043,11 @@ def main():
     inventory  = results["inventory"]
     exceptions = results["exceptions"]
 
-    # ── KPI Strip ────────────────────────────────────────────────────────────────
+    # ── KPI Strip ─────────────────────────────────────────────────────────────────
     render_kpi_strip(pl_bridge, capacity)
     st.markdown("---")
 
-    # ── Exception panel ──────────────────────────────────────────────────────────
+    # ── Exception panel ───────────────────────────────────────────────────────────
     render_exceptions(exceptions)
 
     # ── Chart row 1: Demand + Capacity ───────────────────────────────────────────
@@ -1055,28 +1055,28 @@ def main():
                 unsafe_allow_html=True)
     col_l, col_r = st.columns(2)
     with col_l:
-        st.plotly_chart(chart_demand_comparison(sc_demand), use_container_width=True)
+        st.plotly_chart(chart_demand_comparison(sc_demand), width="full")
     with col_r:
         st.plotly_chart(chart_capacity_utilisation(capacity, params.capacity_alert_pct),
-                        use_container_width=True)
+                        width="full")
 
     # ── Chart row 2: P&L Waterfall + Margin by SKU ───────────────────────────────
     st.markdown('<div class="section-header">💰 Financial Impact Analysis</div>',
                 unsafe_allow_html=True)
     col_l, col_r = st.columns(2)
     with col_l:
-        st.plotly_chart(chart_pl_waterfall(pl_bridge), use_container_width=True)
+        st.plotly_chart(chart_pl_waterfall(pl_bridge), width="full")
     with col_r:
-        st.plotly_chart(chart_margin_by_sku(sc_costs), use_container_width=True)
+        st.plotly_chart(chart_margin_by_sku(sc_costs), width="full")
 
     # ── Chart row 3: Inventory + Working Capital ─────────────────────────────────
     st.markdown('<div class="section-header">📊 Inventory & Working Capital</div>',
                 unsafe_allow_html=True)
     col_l, col_r = st.columns(2)
     with col_l:
-        st.plotly_chart(chart_inventory_trend(inventory), use_container_width=True)
+        st.plotly_chart(chart_inventory_trend(inventory), width="full")
     with col_r:
-        st.plotly_chart(chart_working_capital(inventory), use_container_width=True)
+        st.plotly_chart(chart_working_capital(inventory), width="full")
 
     # ── Capacity detail table ────────────────────────────────────────────────────
     st.markdown('<div class="section-header">🏭 Monthly Capacity Detail</div>',
@@ -1090,9 +1090,9 @@ def main():
         "Month","Gross Hrs","Maint Hrs","OT Hrs","Net Avail Hrs",
         "Required Hrs","Utilisation %","Status"
     ]
-    st.dataframe(cap_display.round(1), use_container_width=True, hide_index=True)
+    st.dataframe(cap_display.round(1), width="full", hide_index=True)
 
-    # ── SKU cost detail ──────────────────────────────────────────────────────────
+    # ── SKU cost detail ───────────────────────────────────────────────────────────
     render_cost_detail_table(sc_costs, params.margin_alert_threshold)
 
     # ── BOM supply risk explorer ─────────────────────────────────────────────────
@@ -1106,10 +1106,10 @@ def main():
             "sku":"SKU","component_name":"Component","std_cost_usd":"Std Cost ($)",
             "origin":"Origin","Risk":"Supply Risk"
         }),
-        use_container_width=True, hide_index=True
+        width="full", hide_index=True
     )
 
-    # ── Footer ───────────────────────────────────────────────────────────────────
+    # ── Footer ──────────────────────────────────────────────────────────────────────
     st.markdown("---")
     st.caption(
         f"🏭 **SIOP Digital Twin** · Tier-1 Automotive Manufacturing · "
