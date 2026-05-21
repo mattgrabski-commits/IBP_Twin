@@ -19,11 +19,9 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
-from plotly.subplots import make_subplots
 import streamlit as st
-from datetime import datetime, date
-from dataclasses import dataclass, field
-from typing import Dict, Tuple
+from dataclasses import dataclass
+from typing import Dict
 import random
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -620,7 +618,7 @@ def chart_pl_waterfall(pl_bridge: Dict[str, float]) -> go.Figure:
     """
     baseline_gp = pl_bridge["baseline_gp"]
     vol_impact  = pl_bridge["volume_rev_impact"]
-    price_impact= pl_bridge["price_impact"]
+    price_impact = pl_bridge["price_impact"]
     rm_impact   = pl_bridge["rm_cost_impact"]
     scenario_gp = pl_bridge["scenario_gp"]
 
@@ -1007,8 +1005,8 @@ def render_cost_detail_table(sc_costs: pd.DataFrame, margin_threshold: float):
 
     styled = (
         display.style
-               .applymap(highlight_margin, subset=["Scenario GM%"])
-               .applymap(highlight_delta,  subset=["GM Delta (ppts)"])
+               .map(highlight_margin, subset=["Scenario GM%"])
+               .map(highlight_delta,  subset=["GM Delta (ppts)"])
                .format({"Scenario GM%": "{:.1f}%", "GM Delta (ppts)": "{:+.1f}"})
     )
     st.dataframe(styled, use_container_width=True, hide_index=True)
