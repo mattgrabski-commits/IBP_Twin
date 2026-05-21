@@ -8,6 +8,7 @@
 Run locally:
     pip install -r requirements.txt
     streamlit run app.py
+    st.set_option("client.showErrorDetails", True)
 """
 
 # ── Standard library ──────────────────────────────────────────────────────────
@@ -600,13 +601,36 @@ def chart_capacity_utilisation(capacity_df: pd.DataFrame, alert_pct: float) -> g
 
     fig.add_hline(y=100, line_dash="dash", line_color=PALETTE["negative"],
                   annotation_text="100% Capacity", annotation_position="bottom right")
+File "/mount/src/ibp_twin/app.py", line 604, in chart_capacity_utilisation
+   
+ --- DEBUG / SAFETY CHECKS (temporary, keep until fixed) ---
+if CHART_LAYOUT is None:
+    CHART_LAYOUT = {}
+
+# If CHART_LAYOUT is a plotly Layout object, don't use ** unpacking
+try:
+    import plotly.graph_objects as go
+    is_plotly_layout = isinstance(CHART_LAYOUT, go.Layout)
+except Exception:
+    is_plotly_layout = False
+
+   if is_plotly_layout:
+    # Layout object: pass as positional argument (NO **)
+    fig.update_layout(CHART_LAYOUT)
+    fig.update_layout(
+        # keep your extra layout args here
+        # e.g. xaxis=dict(...), yaxis=dict(...), title=..., etc.
+    )
+else:
+    # Dict mapping: use ** unpacking
+    if not isinstance(CHART_LAYOUT, dict):
+        # Last-resort conversion (prevents hard crash)
+        CHART_LAYOUT = dict(CHART_LAYOUT)
 
     fig.update_layout(
         **CHART_LAYOUT,
-        title="🏭 Plant Capacity Utilisation — Scenario Plan",
-        yaxis_title="Utilisation %",
-        yaxis=dict(range=[0, max(115, capacity_df["utilisation_pct"].max() + 5)],
-                   gridcolor=PALETTE["grid"]),
+        # keep your extra layout args here
+        # e.g. xaxis=dict(...), yaxis=dict(...), title=..., etc.
     )
     return fig
 
